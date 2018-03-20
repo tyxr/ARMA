@@ -1,4 +1,5 @@
 
+
 def t(x):
     tx = [[] for i in x[0]]
     for i in x:
@@ -12,26 +13,17 @@ def mulMat(tx,x):#tx [m,n] x[n,p] txx[m,p]
             for k in range(len(x)):
                 res[i][j] += tx[i][k] * x[k][j]
     return res
-    
-def det(x):
-    temp = 1
-    iteration = 0
-    for i in range(len(x)):
-        if x[i][i]==0:
-            for j in range(i+1,len(x)):
-                if x[j][i]!=0:
-                    x[i],x[j]=x[j],x[i]
-                    
-                    iteration+=1
-        for k in range(i+1,len(x)):
-            yin = -1*x[k][i]/x[i][i]
-            for u in range(len(x)):
-                x[k][u] = x[k][u]+x[i][u]*yin
-    for i in range(len(x)):
-        temp = temp*x[i][i]
-    if iteration%2==1:
-        temp = -temp
-    return temp
+def det(m):
+    if len(m) <= 0:
+        return None
+    elif len(m) == 1:
+        return m[0][0]
+    else:
+        s = 0
+        for i in range(len(m)):
+            n = [[row[a] for a in range(len(m)) if a != i] for row in m[1:]]  
+            s += m[0][i] * det(n) * (-1) ** (i % 2)
+        return s
 def delMat(x,r,c):
     Ax = []
     for i in range(len(x)):
@@ -54,9 +46,11 @@ def A(x):
             tmp = delMat(tmp,i,j)
             res[i][j]=(1 if (i+j)%2==0 else -1)*det(tmp)
     return res
+
+
 def inv(x):
     res = A(x)
-    dets = det(x)
+    dets = float(det(x))
     for i in range(len(res)):
         for j in range(len(res[0])):
             res[i][j]/=dets
@@ -74,21 +68,13 @@ def ConCols(x,y):
         x.append(row)
     return x
 def test_Mat():
+    
     x = [[2,1,-1],[2,1,0],[1,-1,1]]
-    tx = t(x)
-    res = mulMat(tx,x)
+
     Ax = inv(x)
-    de = det(x)
-    print 'x'
-    print x
-    print 'tx'
-    print tx
-    print 'res'
-    print res
-    print 'Ax'
     print Ax
-    print 'de'
-    print de
+
+
 
 
 if __name__ == '__main__':
